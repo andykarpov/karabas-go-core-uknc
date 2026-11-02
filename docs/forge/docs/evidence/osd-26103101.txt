@@ -1,0 +1,39 @@
+Checked scale=1 popup=0
+Checked scale=1 popup=1
+Checked scale=2 popup=0
+Checked scale=2 popup=1
+Checked scale=4 popup=0
+Checked scale=4 popup=1
+PASS OSD: 4500000 pixel checks, all scales, normal/popup, colors, edges, disabled
+/var/www/own/karabas-forge/forge/cores/mc0511/tests/tb_osd.v:86: $finish called at 160319811000 (1ps)
+
+Full GO top elaboration: PASS
+PASS: GO pin CAPS, READY, OSD, reset, burst, physical FDD SPI mapping/idle and image isolation
+/var/www/own/karabas-forge/forge/cores/mc0511/tests/tb_board_link.v:90: $finish called at 155120000 (1ps)
+PASS physical read: complete sectors, CRC rejection, +/-2% speed, bus TR, continuous fields and odd-gap realignment
+PASS physical write: exact MFM pulse stream, marker, buffering and automatic CRC
+PASS all mappings, idle/reset/off, seek pulses, side/direction, image fallback, write protection and abort
+/var/www/own/karabas-forge/forge/cores/mc0511/tests/tb_physical_fdd.v:195: $finish called at 70145641000 (1ps)
+
+ISE: All constraints were met. Timing errors: 0 (Setup/Max: 0, Hold: 0)
+{
+  "status": "hardware acceptance pending",
+  "build": "26103101",
+  "files": {
+    "mc0511.kg1": {
+      "bytes": 753145,
+      "sha256": "f47a3de0c3e7d235440605157ebb2efe34706dd62983faaa263823862784d1c1"
+    },
+    "mc0511-go-firmware.uf2": {
+      "bytes": 1064960,
+      "sha256": "decececfe5fe3bca22e40609f51d575ef10777326989e9791d16710eb4fea243"
+    }
+  }
+}
+
+Installed to SD1 on board D26610685F233021; FAT UUID 3F19-B304.
+Installed SHA256 (saved settings/paths): af49dfa494ee51f89031ad1777c56438acbc594a1ab6fc345f3c9d93930562fd
+PASS: synced, unmounted, block cache flushed, remounted read-only, exact byte comparison
+Cleanly ejected; serial listing confirms 26103101.
+27 saved switches and 6 file slots preserved; physical FDD None.
+FPGA activation and visual acceptance: select MC-0511 on the board.

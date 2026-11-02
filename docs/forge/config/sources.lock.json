@@ -1,0 +1,40 @@
+{
+  "repositories": [
+    {
+      "path": "external/tang-uknc",
+      "revision": "7cc4d8ea9b8a1e03b31ffbce809d3f011cc9d1e3",
+      "url": "git@github.com:lordamot/tang-uknc.git",
+      "scope": "forge"
+    },
+    {
+      "path": "external/karabas-go-core-tsconf",
+      "revision": "edb2060c36164946622b71847e598ff01e6039f8",
+      "url": "git@github.com:andykarpov/karabas-go-core-tsconf.git",
+      "scope": "forge"
+    },
+    {
+      "path": "external/karabas-go-core-tsconf/modules",
+      "revision": "cff5087502f4d6bbeaeba55ddcfac213af8bf6b5",
+      "url": "https://github.com/andykarpov/karabas-go-modules.git",
+      "scope": "forge"
+    },
+    {
+      "path": "external/karabas-go-firmware",
+      "revision": "3d1d7977fb4948d622db3816c683f2be710a8b0f",
+      "url": "https://github.com/andykarpov/karabas-go-firmware.git",
+      "scope": "forge"
+    },
+    {
+      "path": "external/karabas-go-tools",
+      "revision": "a4405501e2871dce4cdb63f7df48d69ccbfe88a8",
+      "url": "https://github.com/andykarpov/karabas-go-tools.git",
+      "scope": "forge"
+    },
+    {
+      "path": "external/karabas-go",
+      "revision": "86e5929f290246284c1ee42662bbe467283654a2",
+      "url": "git@github.com:andykarpov/karabas-go.git",
+      "scope": "forge"
+    }
+  ]
+}

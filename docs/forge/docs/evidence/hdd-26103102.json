@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-31",
+  "board_serial": "D26610685F233021",
+  "core_name": "UKNC MC-0511",
+  "build": "26103102",
+  "firmware_sha256": "2200980c85ce42a11a027849818430e316b870b3ef89282c63d34d2c5002089f",
+  "kg1_sha256": "5c92a5514ff696120f19c09acb10e9bb511dbf72e2f9068c96c7012fde3c9fc8",
+  "flash_verified": true,
+  "hdd_image": "bappwd.img",
+  "hdd_delay_us": 750,
+  "sectors_per_second": 442.45,
+  "measured_windows": 16,
+  "measured_ms": 160092,
+  "read_errors_logged": false,
+  "resets_during_measured_playback": false,
+  "user_feedback": {
+    "menu": "menu works great!",
+    "playback": "running and sounds fine"
+  },
+  "checks": [
+    "storage wire/reply/lock regression",
+    "sector request/error/write lock coverage",
+    "OSD pixels and bounded input progress",
+    "menu navigation",
+    "Sega scan waveform and polling cadence",
+    "SD reboot synchronization",
+    "IDE SPI prefetch and distributed delay",
+    "Covox bus and mixer",
+    "board I2S serialization"
+  ],
+  "limitations": "Targeted menu/HDD/audio check; video FPS and analogue audio spectrum not measured",
+  "log": "build/hdd-input-budget/acceptance.log"
+}

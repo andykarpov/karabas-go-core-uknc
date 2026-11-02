@@ -1,0 +1,13 @@
+`timescale 1ns/1ps
+// Fast packet-test boundary only. test_hdmi.py also runs the genuine ISE DCM model.
+module DCM_SP #(parameter CLKDV_DIVIDE=2.0,CLKFX_DIVIDE=1,CLKFX_MULTIPLY=5,
+ CLKIN_DIVIDE_BY_2="FALSE",CLKIN_PERIOD=20.0,CLKOUT_PHASE_SHIFT="NONE",
+ CLK_FEEDBACK="1X",DESKEW_ADJUST="SYSTEM_SYNCHRONOUS",PHASE_SHIFT=0,STARTUP_WAIT="FALSE")
+(input CLKIN,CLKFB,PSCLK,PSEN,PSINCDEC,RST,DSSEN,
+ output CLK0,CLK90,CLK180,CLK270,CLK2X,CLK2X180,CLKFX,CLKFX180,CLKDV,PSDONE,LOCKED,output [7:0] STATUS);
+reg serial=0;always #2 serial=~serial;
+assign CLK0=CLKIN,CLKFX=serial,CLKFX180=~serial,LOCKED=~RST;
+endmodule
+module OBUFDS #(parameter CAPACITANCE="DONT_CARE", IOSTANDARD="TMDS_33", SLEW="FAST")(input I,output O,OB);
+assign O=I,OB=~I;
+endmodule

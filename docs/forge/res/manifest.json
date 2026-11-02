@@ -1,0 +1,59 @@
+{
+  "resources": [
+    {
+      "path": "res/media/KKVTST.SAV",
+      "bytes": 5120,
+      "sha256": "b5187a20128a22ec8b724e641f82f079f7787b5be003be8a84e75cf6b220f43e"
+    },
+    {
+      "path": "res/media/PT3X20.dsk",
+      "bytes": 819200,
+      "sha256": "866ea67cbb65de9d947951c82dac4aef7a4bc4ae1b566db8dc15a05918e540bb"
+    },
+    {
+      "path": "res/media/RT11BASE.DSK",
+      "bytes": 819200,
+      "sha256": "834d11949ee97ba76429ec5e96175992555beb74dfeaf916cbecdee38fb5f5ff"
+    },
+    {
+      "path": "res/media/TSTVM2.SAV",
+      "bytes": 3584,
+      "sha256": "6f08baf5e7c2732ddd12b97f0a42f48ee98186ccee5a355d585f5b968f75779c"
+    },
+    {
+      "path": "res/media/WDC170inv_P.img",
+      "bytes": 170598400,
+      "sha256": "99c20217734fb28fa5cb3971cd8c98ff4acb02bb960123c0f569ae3aa87b8996"
+    },
+    {
+      "path": "res/media/bappwd.img",
+      "bytes": 56294400,
+      "sha256": "62b0559d528901dc4a6555f95be9fca1bdc33a1cab3262b5a81e9f53cac843fc"
+    },
+    {
+      "path": "res/media/darkroom-v1.0.0.dsk",
+      "bytes": 819200,
+      "sha256": "a7c4961941f960778dab82cb626f8a339aa6ba69140f861b5a0e249a15ba95cb"
+    },
+    {
+      "path": "res/media/dicewars.dsk",
+      "bytes": 819200,
+      "sha256": "924bfd3f222b5ea630a1d049d71c1c95a9d301fc1252ca41da6a8b219635ee0e"
+    },
+    {
+      "path": "res/media/knight_unpatched.dsk",
+      "bytes": 819200,
+      "sha256": "d819ab2127c5501a250af7c3cc6a982f41fc46b965c4f5b68f4d64f14feda852"
+    },
+    {
+      "path": "res/media/moutst_covox1_reddie.dsk",
+      "bytes": 819200,
+      "sha256": "982bb35acbf3118f9ed1b95024f2883a30f58d6efa69d93fa8e357154ca2cf37"
+    },
+    {
+      "path": "res/media/wdinit.dsk",
+      "bytes": 819200,
+      "sha256": "e355653359e06eb4bda6bb8cd388f16aefafac65a0e37493d09a4f844c625a30"
+    }
+  ]
+}

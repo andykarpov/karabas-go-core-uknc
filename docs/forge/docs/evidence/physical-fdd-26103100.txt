@@ -1,0 +1,45 @@
+MC0511 physical FDD validation — 26103100
+Hardware acceptance: pending
+
+tb_physical_fdd
+PASS physical read: complete sectors, CRC rejection, +/-2% speed, bus TR, continuous fields and odd-gap realignment
+PASS physical write: exact MFM pulse stream, marker, buffering and automatic CRC
+PASS all mappings, idle/reset/off, seek pulses, side/direction, image fallback, write protection and abort
+
+tb_board_link
+PASS: GO pin CAPS, READY, OSD, reset, burst, physical FDD SPI mapping/idle and image isolation
+
+tb_floppy_latency
+PASS all four floppies: 30 ms host stall, 1024 exact words, no stale sector exposure
+
+PASS: every submenu, bounded display, all choices including 60 minutes, file slots, triggers, ejection, wrap and setup/about
+All constraints were met.
+Timing errors: 0  Score: 0  (Setup/Max: 0, Hold: 0)
+
+Full-machine physical boot: tools/test_physical_boot.py --run-ms 10000 --trace
+Read-only 300 RPM / 250 kbit/s RT11BASE model; both heads; tracks [0, 1, 2, 3, 4, 5, 6]
+No image requests. RT-11 banner captured; command prompt not reached in the 11.66-second run.
+Full OS startup and real-drive read/write/format acceptance remain unverified.
+BOOT frames=589 lit=362190625 PPU=1015951 CPU=13979926 memory checks=17673302 errors=0
+
+ISE provenance:
+{
+  "manifest_sha256": "c7e55c613d09ed63b422d2944aedad6fecd6b24a46bf1a17febd651343aa2191",
+  "bitstream_sha256": "89c4a6a02a78203c3cb999c5f2ae58c83b8f3d3e70e17db945b10cf9abbda733"
+}
+Package:
+{
+  "status": "hardware acceptance pending",
+  "build": "26103100",
+  "files": {
+    "mc0511.kg1": {
+      "bytes": 752711,
+      "sha256": "789e51e53e0dd59b39d0b1396b92f30f6016fcb168886032359b4bbef533d133"
+    },
+    "mc0511-go-firmware.uf2": {
+      "bytes": 1064960,
+      "sha256": "decececfe5fe3bca22e40609f51d575ef10777326989e9791d16710eb4fea243"
+    }
+  }
+}
+

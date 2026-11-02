@@ -1,0 +1,561 @@
+{
+  "id": "mc0511",
+  "name": "UKNC MC-0511",
+  "build": "26103102",
+  "bitstream": "karabas_go.bin",
+  "visible": true,
+  "type": "osd",
+  "order": 5,
+  "eeprom_bank": 255,
+  "rtc_mode": 1,
+  "roms": [],
+  "osd": [
+    {
+      "type": "H",
+      "name": "MC-0511 UKNC"
+    },
+    {
+      "type": "F",
+      "name": "FDD0",
+      "slot": 0,
+      "extensions": ".dsk",
+      "dir": "/mc0511-media",
+      "autoload": 0
+    },
+    {
+      "type": "FL",
+      "name": "Run SAV",
+      "slot": 5,
+      "extensions": ".sav",
+      "dir": "/mc0511-media",
+      "autoload": 0
+    },
+    {
+      "type": "F",
+      "name": "HDD0",
+      "slot": 4,
+      "extensions": ".img",
+      "dir": "/mc0511-media",
+      "autoload": 0
+    },
+    {
+      "type": "T",
+      "name": "Reset",
+      "default": 0,
+      "hotkey": "F12"
+    },
+    {
+      "type": "T",
+      "name": "Cold boot",
+      "default": 0,
+      "hotkey": "Menu+F12"
+    },
+    {
+      "type": "H",
+      "name": "Hardware"
+    },
+    {
+      "type": "S",
+      "name": "Volume",
+      "options": [
+        "Mute",
+        "33%",
+        "66%",
+        "100%"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "Beeper",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "Covox",
+      "options": [
+        "Off",
+        "177372",
+        "177100 LPT",
+        "Both"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Kakave mouse",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "H",
+      "name": "Aberrant"
+    },
+    {
+      "type": "S",
+      "name": "AY1",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "AY2",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "AY3",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "Stereo",
+      "options": [
+        "Mono",
+        "ABC"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "Low-pass",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "Old freaks",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "H",
+      "name": "Floppy drives"
+    },
+    {
+      "type": "S",
+      "name": "FDD controller",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 1
+    },
+    {
+      "type": "S",
+      "name": "FDD0 write prot",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "F",
+      "name": "FDD1",
+      "slot": 1,
+      "extensions": ".dsk",
+      "dir": "/mc0511-media",
+      "autoload": 0
+    },
+    {
+      "type": "S",
+      "name": "FDD1 write prot",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "F",
+      "name": "FDD2",
+      "slot": 2,
+      "extensions": ".dsk",
+      "dir": "/mc0511-media",
+      "autoload": 0
+    },
+    {
+      "type": "S",
+      "name": "FDD2 write prot",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "F",
+      "name": "FDD3",
+      "slot": 3,
+      "extensions": ".dsk",
+      "dir": "/mc0511-media",
+      "autoload": 0
+    },
+    {
+      "type": "S",
+      "name": "FDD3 write prot",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Physical FDD",
+      "options": [
+        "None",
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "default": 0
+    },
+    {
+      "type": "H",
+      "name": "Hard disk"
+    },
+    {
+      "type": "S",
+      "name": "HDD controller",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "HDD write prot",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Image format",
+      "options": [
+        "Auto",
+        "Plain",
+        "Inversed"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "HDD delay us",
+      "options": [
+        "0",
+        "25",
+        "50",
+        "75",
+        "100",
+        "125",
+        "150",
+        "175",
+        "200",
+        "225",
+        "250",
+        "275",
+        "300",
+        "325",
+        "350",
+        "375",
+        "400",
+        "425",
+        "450",
+        "475",
+        "500",
+        "525",
+        "550",
+        "575",
+        "600",
+        "625",
+        "650",
+        "675",
+        "700",
+        "725",
+        "750",
+        "775",
+        "800",
+        "825",
+        "850",
+        "875",
+        "900",
+        "925",
+        "950",
+        "975"
+      ],
+      "default": 30
+    },
+    {
+      "type": "H",
+      "name": "RTC clock"
+    },
+    {
+      "type": "S",
+      "name": "RTC controller",
+      "options": [
+        "Off",
+        "On"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Year",
+      "options": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026",
+        "2027",
+        "2028",
+        "2029",
+        "2030",
+        "2031",
+        "2032",
+        "2033",
+        "2034",
+        "2035",
+        "2036",
+        "2037",
+        "2038",
+        "2039"
+      ],
+      "default": 6
+    },
+    {
+      "type": "S",
+      "name": "Month",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Day",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Hour",
+      "options": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23"
+      ],
+      "default": 0
+    },
+    {
+      "type": "S",
+      "name": "Minute",
+      "options": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59"
+      ],
+      "default": 0
+    },
+    {
+      "type": "H",
+      "name": "Video"
+    },
+    {
+      "type": "S",
+      "name": "Color",
+      "options": [
+        "RGB",
+        "BGR"
+      ],
+      "default": 0
+    },
+    {
+      "type": "H",
+      "name": "About"
+    },
+    {
+      "type": "P",
+      "name": "UKNC FPGA: Alex Gurov"
+    },
+    {
+      "type": "P",
+      "name": "Tang v2: Sergei Lemeshev"
+    },
+    {
+      "type": "P",
+      "name": "UKNCBTL: nzeemin"
+    },
+    {
+      "type": "P",
+      "name": "BadApple: blairecas"
+    },
+    {
+      "type": "P",
+      "name": "Peripherals: xrust; tests: reddie"
+    }
+  ],
+  "spi_freq": 16,
+  "buttons": {
+    "btn1": "core",
+    "btn2": {
+      "press": "osd",
+      "hold": "menu",
+      "hold_ms": 3000
+    }
+  }
+}
