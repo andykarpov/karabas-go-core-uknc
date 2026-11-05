@@ -34,5 +34,6 @@ step with the OSD of `core*.json`.
 - Inputs per board: `karabas_<board>.prj`, `.xst` (defines `HW_ID1` Go, `HW_ID2` Mini, `HW_ID2 HW_ID3` Mini G),
   `.ucf`, `.ut`. Every Mini / Mini G top must drive `FT_CLK_OUT` (8 MHz).
 - map / par `-ol high`, cost table `-t 2` on every board.
+- After a Mini or Mini G build run `make <board>-coremode` (timing of the pixel clock paths without the FT mode constraints, `pcf_core.py`).
 - Builds take 10..30 minutes: run them in the background, one board at a time, do not edit RTL while XST runs.
 - The `.bin` and `.kg*` files are committed as the release.
