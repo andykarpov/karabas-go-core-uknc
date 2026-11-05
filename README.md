@@ -7,11 +7,13 @@ of boards (Xilinx Spartan-6 XC6SLX25): the CPU and the PPU with their memory and
 images, the physical drive on the Go), the IDE hard disk cartridge with the WD ROM (image files), the Kakave
 mouse and real-time clock, the three AYs of the Aberrant card, the beeper, both Covox ports and the C2 serial port.
 
-| Board | Core file | Video | Audio |
-|---|---|---|---|
-| Karabas Go | `uknc.kg1` | VGA | I2S DAC (PCM5102) |
-| Karabas Mini | `uknc.kg2` | HDMI | HDMI, analog output (sigma-delta) |
-| Karabas Mini G | `uknc.kg3` | HDMI | HDMI, I2S DAC (PCM5102) |
+One core file `uknc.kg` for all the boards (firmware 26110415 or newer).
+
+| Board | Video | Audio |
+|---|---|---|
+| Karabas Go | VGA | I2S DAC (PCM5102) |
+| Karabas Mini | HDMI | HDMI, analog output (sigma-delta) |
+| Karabas Mini G | HDMI | HDMI, I2S DAC (PCM5102) |
 
 ## Authors
 

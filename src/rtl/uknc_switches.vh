@@ -1,4 +1,4 @@
-// The OSD switches of core*.json, the same order on every board: register n = softsw[n*8 +: 8]
+// The OSD switches of core.json, the same order on every board: register n = softsw[n*8 +: 8]
 // (CMD_SWITCHES index = the position of the item in the flat "osd" list, file items included).
 //  0 F FDD0 (slot 0)           1 F HDD0 (slot 4)       2 Kakave mouse      3 RTC controller   4 Color RGB / BGR
 //  5 T Reset (F12)             6 Volume                7 Beeper            8 Covox            9-11 AY1-AY3
