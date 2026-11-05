@@ -39,7 +39,7 @@ data of their projects and keep their original terms.
 ## Using it
 
 Copy `uknc.kg` to the SD card (SD1) and the disk images to `/mc0511-media` (the default folder of
-the file items). The OSD opens with Menu (Win) + Esc; its pages need firmware 26103113 or newer.
+the file items). The OSD opens with Menu (Win) + Esc.
 
 | Item | |
 |---|---|
