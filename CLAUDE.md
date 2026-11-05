@@ -25,8 +25,11 @@ step with the OSD of `core.json`.
 - `src/rtl/uknc_switches.vh`: the OSD switch layout (index = position in the flat `osd` list of `core.json`, the same
   on every board), `uknc_switch_fields.vh`: their fields. Change `core.json`, the INIT value and the fields
   together.
-- No firmware hooks: the forge firmware overlay (Run SAV DSK builder, HDD geometry and RTC seed through
-  CMD_SWITCHES 240-245, clock footer 0xF6, /mc0511-media lock) is not used.
+- Firmware: the forge overlay (HDD geometry and RTC seed through CMD_SWITCHES 240-245, clock footer 0xF6,
+  /mc0511-media lock) is not used. The one piece of firmware for this core is Run SAV (karabas-go-firmware
+  `storage/uknc_sav`): the `FL` item of slot 5 of core id `uknc` sends no file, it makes `RT11SAV.DSK` from
+  `/mc0511-media/RT11BASE.DSK`, mounts it in FDD0 and triggers `Reset`. Keep the names `FDD controller` and `Reset`
+  and this slot. The item stands after the switches (position 28), so their numbers stay.
 
 ## Build
 
