@@ -75,3 +75,4 @@ _xmsgs/
 src/build_*.log
 src/*_core.log
 src/netlist.lst
+src/kg_*.stamp

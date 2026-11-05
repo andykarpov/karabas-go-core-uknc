@@ -7,11 +7,13 @@
 дисковод), картридж жёсткого диска IDE с WD ROM (файлы образов), мышь и часы Kakave, три AY платы Aberrant,
 бипер, оба порта Covox и последовательный порт C2.
 
-| Плата | Файл ядра | Видео | Звук |
-|---|---|---|---|
-| Karabas Go | `uknc.kg1` | VGA | I2S ЦАП (PCM5102) |
-| Karabas Mini | `uknc.kg2` | HDMI | HDMI, аналоговый выход (sigma-delta) |
-| Karabas Mini G | `uknc.kg3` | HDMI | HDMI, I2S ЦАП (PCM5102) |
+Один файл ядра `uknc.kg` для всех плат (прошивка 26110415 или новее).
+
+| Плата | Видео | Звук |
+|---|---|---|
+| Karabas Go | VGA | I2S ЦАП (PCM5102) |
+| Karabas Mini | HDMI | HDMI, аналоговый выход (sigma-delta) |
+| Karabas Mini G | HDMI | HDMI, I2S ЦАП (PCM5102) |
 
 ## Авторы
 

@@ -14,7 +14,7 @@ to the forge workspace).
 
 Keep the authorship: `README.md` / `README.ru.md` name the authors of the machine and of the port and the licenses
 (GPL-3.0-or-later as a whole; tang-uknc MIT, `docs/licenses/`; the ROMs keep their own terms). Keep both READMEs in
-step with the OSD of `core*.json`.
+step with the OSD of `core.json`.
 
 ## Layout
 
@@ -22,8 +22,8 @@ step with the OSD of `core*.json`.
 - `src/rtl/uknc.v`: the machine (CPU, PPU, memory / video, floppies, IDE, sound, Kakave, UART); the host is in the tops.
 - `src/rtl/karabas_<board>_top.v`: kg_pll, kg_mcu, img_sdc (image sectors: FDD0-3 slots 0-3, HDD0 slot 4),
   kg_soft_switches, uknc_keyboard, OSD, video / audio out of the board.
-- `src/rtl/uknc_switches.vh`: the OSD switch layout (index = position in the flat `osd` list of `core*.json`, the same
-  on every board), `uknc_switch_fields.vh`: their fields. Change all three `core*.json`, the INIT value and the fields
+- `src/rtl/uknc_switches.vh`: the OSD switch layout (index = position in the flat `osd` list of `core.json`, the same
+  on every board), `uknc_switch_fields.vh`: their fields. Change `core.json`, the INIT value and the fields
   together.
 - No firmware hooks: the forge firmware overlay (Run SAV DSK builder, HDD geometry and RTC seed through
   CMD_SWITCHES 240-245, clock footer 0xF6, /mc0511-media lock) is not used.
@@ -36,4 +36,4 @@ step with the OSD of `core*.json`.
 - map / par `-ol high`, cost table `-t 2` on every board.
 - After a Mini or Mini G build run `make <board>-coremode` (timing of the pixel clock paths without the FT mode constraints, `pcf_core.py`).
 - Builds take 10..30 minutes: run them in the background, one board at a time, do not edit RTL while XST runs.
-- The `.bin` and `.kg*` files are committed as the release.
+- One `src/core.json` (per-board differences in `boards`, kgo2: karabas-go-tools `docs/kgo2.md`) and one `src/uknc.kg`: `make <board>-core` puts the bitstream of that board in. The `.bin` and `.kg` files are committed as the release.
