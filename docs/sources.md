@@ -46,6 +46,7 @@ The modules were renamed `mc0511_*` -> `uknc_*`.
 | `src/karabas_*.ucf` | pins of karabas-go-core-baseconf (= tsconf); timing of forge `src/constraints/timing.ucf` with the HDMI part of baseconf |
 | `src/karabas_*.xst`, `.ut`, `src/Makefile` | karabas-go-core-baseconf |
 | `src/make_core.py` | symlink to `../../karabas-go-tools/make_core/make_core.py` |
+| `src/pcf_core.py` | after karabas-go-core-tsconf, with the constraints of this core (pixel clock `clk_vid`) |
 | `modules/` | [karabas-go-modules](https://github.com/andykarpov/karabas-go-modules), unchanged (submodule) |
 
 ## karabas-forge archive (`docs/forge/`)

@@ -697,9 +697,6 @@ always @(posedge clkram)begin
                SDRAM_DQMH <= 1;
              end
       endcase
-`ifdef UKNC_TEST_NOVID
-      if(q >= 4'd2 && q <= 4'd5)begin SDRAM_DQML <= 1; SDRAM_DQMH <= 1; end  // TEST: no video read data on DQ
-`endif
       end
    end
 //-------------------------------------------------------------------

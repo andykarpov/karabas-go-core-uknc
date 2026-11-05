@@ -144,12 +144,6 @@ assign WRESET_N = 1'b0;
 assign WD = 16'hzzzz;
 assign TAPE_OUT = 1'b0;
 assign UART_CTS = 1'bz;
-`ifdef UKNC_TEST_DQM
-assign SDR_DQM = 2'b11;
-`endif
-`ifdef UKNC_TEST_NOUART
-assign UART_TX = 1'b1;
-`endif
 assign MIDI_TX = 1'b1;
 assign ESP32_SPI_CS_N = 1'b1;
 assign ADC_CLK = 1'b0;
@@ -445,11 +439,7 @@ uknc #(.PHYS_FDD(0)) machine(
 	.sdram_a				(SDR_A[10:0]),
 	.sdram_dq			(SDR_DQ),
 	.sdram_ba			(SDR_BA),
-`ifdef UKNC_TEST_DQM
-	.sdram_dqm			(),
-`else
 	.sdram_dqm			(SDR_DQM),
-`endif
 	.sdram_cs_n			(),
 	.sdram_we_n			(SDR_WE_N),
 	.sdram_ras_n		(SDR_RAS_N),
@@ -518,11 +508,7 @@ uknc #(.PHYS_FDD(0)) machine(
 	.sd_wr_data			(sd_wr_data),
 
 	.uart_rx				(UART_RX),
-`ifdef UKNC_TEST_NOUART
-	.uart_tx				(),
-`else
 	.uart_tx				(UART_TX),
-`endif
 
 	.FDC_INDEX			(1'b0),
 	.FDC_TR00			(1'b0),
