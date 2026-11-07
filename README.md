@@ -46,7 +46,7 @@ the file items). The OSD opens with Menu (Win) + Esc.
 | FDD0, HDD0 | DSK image of drive 0, IMG image of the hard disk (needs Hard disk / HDD controller On) |
 | Kakave mouse, RTC controller | the Kakave+ cartridge: USB mouse, real-time clock |
 | Color | RGB / BGR |
-| Run SAV | runs a `.SAV` program in RT-11 (firmware 26110520 or newer): the disk `RT11SAV.DSK` is made from `RT11BASE.DSK` of `/mc0511-media`, an RT-11 system disk you put there, mounted in FDD0 and the machine reset; the disk before it stays as `RT11OLD.DSK` |
+| Run SAV | runs a `.SAV` program in RT-11 (firmware 26110716 or newer; 26110520..26110715 reboot when the file is chosen): the disk `RT11SAV.DSK` is made from `RT11BASE.DSK` (or `BASERT11.DSK`, its name in `soft/` of tang-uknc) of `/mc0511-media`, an RT-11 system disk you put there, mounted in FDD0 and the machine reset; the disk before it stays as `RT11OLD.DSK` |
 | Reset (F12) | reset of the machine |
 | Sound | volume, beeper, Covox (port 177372, 177100 LPT or both), AY1-AY3, stereo, low-pass, old freaks |
 | Floppy drives | FDD controller, FDD1-FDD3 images, write protection of each drive, physical drive (Go: A-D) |
