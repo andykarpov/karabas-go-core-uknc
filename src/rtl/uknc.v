@@ -74,6 +74,7 @@ module uknc #(
 	input wire system_mouse_en,
 	input wire system_rtc_en,
 	input wire [2:0] system_physical_fdd,
+	input wire [2:0] system_cpu_slow,    // CPU speed: 0 full, 1..7 = 1/2, 1/2.5, 1/3, 1/3.5, 1/4, 1/5, 1/6
 
 	// RTC set (a toggle per field: 0 year-2020, 1 month-1, 2 day-1, 3 hour, 4 minute, 5 second) and its time
 	input wire rtc_set_tgl,
@@ -736,6 +737,38 @@ kakave kkv1(
 );
 
 //------------------------------------------------------------//
+//------------------------------------------------------------//
+// CPU slowdown (OSD CPU speed): the slow clock mode of vm2_wb with a strobe every 2, 2.5 .. 6 clocks
+// (a phase accumulator of half clocks: +2 per clock, a strobe and -period2 when it reaches period2), so the CPU
+// runs that many times slower on average. The switch comes from the host clock: two flip-flops (it is static).
+reg [2:0] cpu_slow_s1 = 3'd0, cpu_slow_s2 = 3'd0;
+reg [3:0] cpu_acc = 4'd0;
+reg cpu_clk_ena = 1'b0;
+wire cpu_slow = cpu_slow_s2 != 3'd0;
+reg [3:0] cpu_period2;                   // the period in half clocks
+always @(*)
+	case (cpu_slow_s2)
+		3'd1: cpu_period2 = 4'd4;
+		3'd2: cpu_period2 = 4'd5;
+		3'd3: cpu_period2 = 4'd6;
+		3'd4: cpu_period2 = 4'd7;
+		3'd5: cpu_period2 = 4'd8;
+		3'd6: cpu_period2 = 4'd10;
+		default: cpu_period2 = 4'd12;
+	endcase
+always @(posedge cpuclk_p) begin
+	cpu_slow_s1 <= system_cpu_slow;
+	cpu_slow_s2 <= cpu_slow_s1;
+	if (cpu_acc + 4'd2 >= cpu_period2) begin
+		cpu_acc <= cpu_acc + 4'd2 - cpu_period2;
+		cpu_clk_ena <= 1'b1;
+	end
+	else begin
+		cpu_acc <= cpu_acc + 4'd2;
+		cpu_clk_ena <= 1'b0;
+	end
+end
+
 cpu_wb cpu1(
 	.clk_ppu_p    (cpuclk_p),
 	.clk_ppu_n    (cpuclk_n),
@@ -768,7 +801,9 @@ cpu_wb cpu1(
 	.pin_wbi_ack_i(cpu_wbi_ack_i),
 	.pin_wbi_stb_o(cpu_wbi_stb_o),
 
-	.pin_tmr_ena_i(pin_tmr_ena_o)
+	.pin_tmr_ena_i(pin_tmr_ena_o),
+	.pin_clk_slow_i(cpu_slow),
+	.pin_clk_ena_i(cpu_clk_ena)
 );
 
 //------------------------------------------------------------//

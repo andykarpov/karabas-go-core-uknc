@@ -30,7 +30,9 @@ module cpu_wb(
     pin_wbi_ack_i,
     pin_wbi_stb_o,
 
-    pin_tmr_ena_i
+    pin_tmr_ena_i,
+    pin_clk_slow_i,
+    pin_clk_ena_i
 );
 input        clk_ppu_p;
 input        clk_ppu_n;
@@ -64,14 +66,18 @@ input        pin_wbi_ack_i;
 output       pin_wbi_stb_o;
 
 input        pin_tmr_ena_i;
+// The slow clock mode of vm2_wb: the bus cycles keep the average rate of pin_clk_ena_i
+// (a strobe of the clock), the CPU slowdown of the OSD.  Nov 2026.
+input        pin_clk_slow_i;
+input        pin_clk_ena_i;
 //========================================================================================
 //  Wishbone CPU
 //========================================================================================
 wire       vm_clk_p = clk_ppu_p;
 wire       vm_clk_n = clk_ppu_n;
 
-wire       vm_clk_ena  = 1'b0;
-wire       vm_clk_slow = 1'b0;
+wire       vm_clk_ena  = pin_clk_ena_i;
+wire       vm_clk_slow = pin_clk_slow_i;
 
 wire       vm_init;
 wire       vm_halt   = pin_vm_halt_i;

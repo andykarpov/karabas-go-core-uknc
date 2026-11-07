@@ -31,7 +31,8 @@ step with the OSD of `core.json`.
   /mc0511-media lock) is not used. The one piece of firmware for this core is Run SAV (karabas-go-firmware
   `storage/uknc_sav`): the `FL` item of slot 5 of core id `uknc` sends no file, it makes `RT11SAV.DSK` from
   `/mc0511-media/RT11BASE.DSK`, mounts it in FDD0 and triggers `Reset`. Keep the names `FDD controller` and `Reset`
-  and this slot. The item stands after the switches (position 28), so their numbers stay.
+  and this slot. The item stands at position 28 after the switches 0..27; new switches go after it (29 CPU speed),
+  so the numbers of the old ones stay.
 
 ## Build
 

@@ -490,6 +490,7 @@ uknc #(.PHYS_FDD(1)) machine(
 	.system_mouse_en	(sw_mouse_en),
 	.system_rtc_en		(sw_rtc_en),
 	.system_physical_fdd(sw_physical_fdd),
+	.system_cpu_slow	(sw_cpu_slow),
 
 	.rtc_set_tgl		(rtc_set_tgl),
 	.rtc_set_field		(rtc_set_field),
