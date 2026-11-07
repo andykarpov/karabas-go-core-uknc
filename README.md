@@ -65,6 +65,25 @@ the punctuation and the service keys as in UKNCBTL:
 | Ctrl / Alt / right Alt | УПР / АЛФ / ГРАФ | F1-F5 | К1-К5 |
 | F6 / F7 / F8 | ПОМ / УСТ / ИСП (HELP / SET / EXEC) | F9, Insert | СБРОС (RESET) |
 | F10, PageUp | СТОП (STOP) | Delete / End / PageDown | ПОМ / УСТ / ИСП |
+| Keypad: digits, `.`, `-`, `+`, Enter | the same keys of the UKNC keypad | Keypad `/` / `*` | `/ ?` / `: *` |
+
+Notes:
+
+- The layout is **positional**, as in UKNCBTL: a PC key presses the UKNC key in its place and the UKNC
+  picks the character by its own keyboard. So the shifted characters often differ from the PC: `:` is
+  `;` **without** Shift, Shift+`;` gives `*`; `=` is Shift+`-`; `+` is Shift+`` ` ``; Shift+2 gives `"`,
+  not `@` (`@` is the `'` key); Shift+`'` gives `` ` ``. Shift with the digits as printed on the UKNC keys
+  (Shift+1 = `!`, Shift+3 = `#` and so on).
+- The PC `=` key is `Ч ^`: `^` in LAT mode (drawn as `¬` by the UKNC font), Ч in RUS mode.
+- Num Lock is ignored: the keypad is always the UKNC keypad. The PC has no key for the comma of the
+  UKNC keypad.
+- The UKNC keyboard sends the keys by the rows of its matrix, and two keys of one row can't be held
+  together: pressing the second one releases the first. Hence two limits: Shift can't be combined with
+  7, 8, 9 and `-` of the keypad (the same row), and УПР / АЛФ / ГРАФ can't be combined with Esc (АР2),
+  Tab, 0 and Enter of the keypad.
+- Shift, УПР, АЛФ and ГРАФ always reach the machine before the key pressed with them and are released
+  after it (УПР+C breaks a program in RT-11).
+- F12 resets the machine (the Reset item), Menu (Win) + Esc opens the OSD.
 
 ## Build
 
