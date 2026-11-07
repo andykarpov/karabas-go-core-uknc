@@ -18,9 +18,10 @@ same layout. The changes are those of the port in karabas-forge (`docs/forge/too
 | `sdram2.v` | the video phase starts at `horz` 8; DQ driven through an output enable; five refreshes per line (8192-row chip of the Karabas boards); read data in one IOB register bank, its phase and the acknowledgements advance with it (`port_sdram.py retime`) |
 | `ide/ide.v` | input `image_sectors`: an invalid CHS or an LBA beyond the image gives ATA IDNF (`bad_location`) instead of a request to the MCU |
 | `ppu.v` | output `pin_rom_o` (the cycle reads the firmware ROM) and inputs `pin_rom_ovr_i` / `pin_rom_ovr_dat_i`: a word in place of the ROM word (the kept SETUP colors, `uknc_setup_keep.v`; this repository, 2026-11) |
+| `cpu.v` | inputs `pin_clk_slow_i` / `pin_clk_ena_i` to `vm_clk_slow` / `vm_clk_ena` of vm2_wb (were 0): the CPU speed of the OSD, the strobe made in `uknc.v` (this repository, 2026-11) |
 | `ay/ym2149.v` | was `ym2149.sv`: Verilog-2001 for XST (no `always_comb`, unpacked arrays, `'{default}`, block-scoped loop variables) |
 
-The other files of the list are unchanged: `aberrant.v covox.v mixer.v cpu.v mkcolorreg.v vp1_120.v
+The other files of the list are unchanged: `aberrant.v covox.v mixer.v mkcolorreg.v vp1_120.v
 vp1-128fdd.v vp65.v wmrst.v ide/sd_arbiter.v uart/uart_rx.v uart/uart_tx.v wm2wb/vm2_plm.v wm2wb/vm2_wb.v`.
 
 Not taken: the host of the Tang Nano board (`mister/*`: MCU SPI, sysctrl, sd_card, OSD, HID, flash writer, core
