@@ -85,6 +85,14 @@ Notes:
   after it (УПР+C breaks a program in RT-11).
 - F12 resets the machine (the Reset item), Menu (Win) + Esc opens the OSD.
 
+### SETUP colors are kept
+
+The colors of the SETUP menu of the UKNC (F7, УСТ: 3 symbol, 4 cell, 5 screen, 6 cursor) stay after a reset
+and power off: the core keeps them in the EEPROM of the core, the file `/config/uknc.eep` of the SD card
+(firmware with kgo2 cores). For green on black choose symbol 3 (green), cell 1 and screen 1 (black). The
+other items of the menu (VT-52, format, scroll, timer) are not kept, nor the colors set by programs with ESC
+sequences. Deleting `/config/uknc.eep` gives white on blue again.
+
 ### RT-11 versions
 
 A game that stops at once with `*** СТОП ***` (the HALT instruction) may need another RT-11, this is not a
