@@ -1,5 +1,10 @@
-// USB boot reports to the UKNC row protocol. Source: mnano/uknc.h.
+// USB boot reports to the UKNC row protocol. Source: mnano/uknc.h; the punctuation keys and
+// Insert..PageDown as UKNCBTL's LAT table (ScreenView.cpp): ;: -> 0174 (: *), ' -> 077 (@),
+// ` -> 007 (; +), = -> 0110 (Ch ^), Home -> 0155 (Hard sign), Insert 0171 SBROS, Delete 0172 POM,
+// PageUp 0004 STOP, End 0152 UST, PageDown 0151 ISP.
 // Wait for the seven-frame report to settle; emit row release before rollover press.
+// The modifier rows (5: Shift, 6: UPR / ALF / GRAF) are pressed before the other rows and released
+// after them: a round robin over the rows sent Shift+- as '-' then Shift, so the machine saw '-'.
 module uknc_keyboard #(parameter EVENT_CYCLES=25000)(
  input wire clk,reset,input wire [55:0] report,output reg [7:0] keycode=0);
 function [7:0] translate;
@@ -47,14 +52,14 @@ function [7:0] translate;
 8'h2b:translate=8'o26;
 8'h2c:translate=8'o113;
 8'h2d:translate=8'o175;
-8'h2e:translate=8'o175;
+8'h2e:translate=8'o110;
 8'h2f:translate=8'o36;
 8'h30:translate=8'o37;
 8'h31:translate=8'o136;
 8'h32:translate=8'o77;
-8'h33:translate=8'o7;
-8'h34:translate=8'o155;
-8'h35:translate=8'o77;
+8'h33:translate=8'o174;
+8'h34:translate=8'o77;
+8'h35:translate=8'o7;
 8'h36:translate=8'o117;
 8'h37:translate=8'o135;
 8'h38:translate=8'o173;
@@ -69,6 +74,12 @@ function [7:0] translate;
 8'h41:translate=8'o151;
 8'h42:translate=8'o171;
 8'h43:translate=8'o4;
+8'h49:translate=8'o171;
+8'h4a:translate=8'o155;
+8'h4b:translate=8'o4;
+8'h4c:translate=8'o172;
+8'h4d:translate=8'o152;
+8'h4e:translate=8'o151;
 8'h4f:translate=8'o133;
 8'h50:translate=8'o116;
 8'h51:translate=8'o134;
@@ -95,7 +106,9 @@ reg [7:0] wanted[0:15];
 reg [7:0] held[0:15];
 reg [55:0] previous_report=0;
 reg [15:0] quiet=0;
-reg [3:0] row=0;
+reg [3:0] sel;
+reg sel_valid;
+integer k;
 reg [31:0] spacing=0;
 reg [7:0] code;
 integer i,j;
@@ -113,6 +126,21 @@ always @* begin
  if(report[5]) wanted[5]=8'o105;
  if(report[6]) wanted[6]=8'o66;
 end
+// the next row to send: a modifier row going down, else the lowest other row, else a modifier
+// row going up (or changing)
+always @* begin
+ sel=0; sel_valid=0;
+ if(held[5]!=wanted[5] && wanted[5]!=0 && held[5]==0) begin sel=5; sel_valid=1; end
+ else if(held[6]!=wanted[6] && wanted[6]!=0 && held[6]==0) begin sel=6; sel_valid=1; end
+ else begin
+  for(k=15;k>=0;k=k-1)
+   if(k!=5 && k!=6 && held[k]!=wanted[k]) begin sel=k; sel_valid=1; end
+  if(!sel_valid) begin
+   if(held[5]!=wanted[5]) begin sel=5; sel_valid=1; end
+   else if(held[6]!=wanted[6]) begin sel=6; sel_valid=1; end
+  end
+ end
+end
 always @(posedge clk) begin
  previous_report<=report;
  if(report!=previous_report) quiet<=0;
@@ -120,13 +148,13 @@ always @(posedge clk) begin
  if(spacing!=0) spacing<=spacing-1'b1;
  if(reset) begin
   for(i=0;i<16;i=i+1) held[i]<=0;
-  keycode<=0;row<=0;spacing<=EVENT_CYCLES;
+  keycode<=0;spacing<=EVENT_CYCLES;
  end else if(spacing==0 && quiet>=EVENT_CYCLES) begin
-  if(held[row]!=wanted[row]) begin
-   if(held[row]!=0) begin keycode<={4'h8,row};held[row]<=0;end
-   else begin keycode<=wanted[row];held[row]<=wanted[row];end
+  if(sel_valid) begin
+   if(held[sel]!=0) begin keycode<={4'h8,sel};held[sel]<=0;end
+   else begin keycode<=wanted[sel];held[sel]<=wanted[sel];end
    spacing<=EVENT_CYCLES;
-  end else row<=row+1'b1;
+  end
  end
 end
 endmodule
