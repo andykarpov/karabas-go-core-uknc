@@ -52,6 +52,20 @@ the file items). The OSD opens with Menu (Win) + Esc.
 | Floppy drives | FDD controller, FDD1-FDD3 images, write protection of each drive, physical drive (Go: A-D) |
 | Hard disk | HDD controller, write protection, image format (auto / plain / inversed), HDD delay |
 
+Keyboard: the letters and digits are on their Latin places (the UKNC JCUKEN layout: Q = Я, W = В and so on),
+the punctuation and the service keys as in UKNCBTL:
+
+| PC | UKNC | PC | UKNC |
+|---|---|---|---|
+| `-` | `- =` | `;` | `: *` |
+| `=` | `Ч ^` | `'` | `Ю @` |
+| `` ` `` | `; +` | `\` | `Э \` |
+| `[` `]` | `Ш [` `Щ ]` | Home | `Ъ` |
+| Esc | АР2 (AR2) | Caps Lock | ФИКС (FIX) |
+| Ctrl / Alt / right Alt | УПР / АЛФ / ГРАФ | F1-F5 | К1-К5 |
+| F6 / F7 / F8 | ПОМ / УСТ / ИСП (HELP / SET / EXEC) | F9, Insert | СБРОС (RESET) |
+| F10, PageUp | СТОП (STOP) | Delete / End / PageDown | ПОМ / УСТ / ИСП |
+
 ## Build
 
 ISE 14.7: `cd src && make go` (or `mini`, `minig`); see [CLAUDE.md](CLAUDE.md).

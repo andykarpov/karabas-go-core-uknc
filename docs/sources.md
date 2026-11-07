@@ -31,7 +31,7 @@ loader), `hdmi/*`, the Gowin IP (`ip/*`, `fdd/ip/*`, `ide/ide_rom.v`), `top.v`.
 |---|---|
 | `src/rtl/uknc.v` | the machine of `tang/src/top.v` without the Tang host, with the wiring of forge `machine()` (`prepare.py`): memory phase aligned to the PPU clock, PPU held while the MCU is busy, the image size for the IDE bounds, the physical floppy |
 | `src/rtl/uknc_memory.v` | forge `mc0511_memory.v`: the ROMs, the sector buffer and the UART FIFO in place of the Gowin IP; ROM paths `roms/` |
-| `src/rtl/uknc_keyboard.v` | forge `mc0511_keyboard.v`: USB boot report to the UKNC keyboard codes (the table of the MCU firmware of tang `mnano/uknc.h`) |
+| `src/rtl/uknc_keyboard.v` | forge `mc0511_keyboard.v`: USB boot report to the UKNC keyboard codes (the table of the MCU firmware of tang `mnano/uknc.h`; the keys `;:`, `'"`, `` `~ ``, `=+` and Insert..PageDown changed to the LAT table of UKNCBTL `ScreenView.cpp`: `: *`, `@`, `; +`, `Ч ^`, Home = Ъ, Insert = СБРОС, Delete = ПОМ, PageUp = СТОП, End = УСТ, PageDown = ИСП; the rows are no longer sent round robin: the modifier rows 5 and 6 (Shift, УПР / АЛФ / ГРАФ) go down before the other rows and up after them, so Shift+key is never sent key first) |
 | `src/rtl/uknc_physical_fdd.v`, `uknc_mfm_rx.v`, `uknc_mfm_tx.v` | forge `mc0511_physical_fdd.v`, `mc0511_mfm_*.v` (Go floppy connector) |
 | `src/roms/uknc_rom.hex`, `rawtrk.hex` | tang `tang/rom/uknc_rom.mif`, `tang/src/fdd/rom128/rawtrk.mif` (16-bit words, `tools/mif.py`) |
 | `src/roms/ide_wdrom.hex` | tang `tang/rom/ide_wdromv0110.bin` (little-endian words) |
