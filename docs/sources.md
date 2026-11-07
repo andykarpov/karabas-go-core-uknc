@@ -17,9 +17,10 @@ same layout. The changes are those of the port in karabas-forge (`docs/forge/too
 | `xm2-01.v` | the timer on `pin_vm_clk25` with an edge detector of `timer_clk` (was clocked by it) |
 | `sdram2.v` | the video phase starts at `horz` 8; DQ driven through an output enable; five refreshes per line (8192-row chip of the Karabas boards); read data in one IOB register bank, its phase and the acknowledgements advance with it (`port_sdram.py retime`) |
 | `ide/ide.v` | input `image_sectors`: an invalid CHS or an LBA beyond the image gives ATA IDNF (`bad_location`) instead of a request to the MCU |
+| `ppu.v` | output `pin_rom_o` (the cycle reads the firmware ROM) and inputs `pin_rom_ovr_i` / `pin_rom_ovr_dat_i`: a word in place of the ROM word (the kept SETUP colors, `uknc_setup_keep.v`; this repository, 2026-11) |
 | `ay/ym2149.v` | was `ym2149.sv`: Verilog-2001 for XST (no `always_comb`, unpacked arrays, `'{default}`, block-scoped loop variables) |
 
-The other files of the list are unchanged: `aberrant.v covox.v mixer.v cpu.v ppu.v mkcolorreg.v vp1_120.v
+The other files of the list are unchanged: `aberrant.v covox.v mixer.v cpu.v mkcolorreg.v vp1_120.v
 vp1-128fdd.v vp65.v wmrst.v ide/sd_arbiter.v uart/uart_rx.v uart/uart_tx.v wm2wb/vm2_plm.v wm2wb/vm2_wb.v`.
 
 Not taken: the host of the Tang Nano board (`mister/*`: MCU SPI, sysctrl, sd_card, OSD, HID, flash writer, core
@@ -42,6 +43,7 @@ The modules were renamed `mc0511_*` -> `uknc_*`.
 
 | Path | From |
 |---|---|
+| `src/rtl/uknc_setup_keep.v` | new: the colors of the SETUP menu in DS1307 registers 8..14 of kg_mcu (the core EEPROM, `eeprom_bank` 4), put in place of the ROM table 100012 and the terminal template 112252 |
 | `src/rtl/karabas_*_top.v` | new, after the tops of karabas-go-core-baseconf / tsconf |
 | `src/karabas_*.ucf` | pins of karabas-go-core-baseconf (= tsconf); timing of forge `src/constraints/timing.ucf` with the HDMI part of baseconf |
 | `src/karabas_*.xst`, `.ut`, `src/Makefile` | karabas-go-core-baseconf |

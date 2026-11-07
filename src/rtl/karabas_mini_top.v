@@ -221,6 +221,10 @@ wire [15:0] img_sum;
 wire [23:0] img_q_di;
 wire img_data_wr, img_result_wr, img_q_wr, img_q_ack;
 wire [7:0] rtc_a, rtc_do;
+// RTC address: the kept SETUP colors (uknc_setup_keep in the machine) or the Kakave clock seed
+wire [7:0] seed_rtc_a, keep_rtc_a, keep_rtc_di;
+wire keep_rtc_own, keep_rtc_wr;
+assign rtc_a = keep_rtc_own ? keep_rtc_a : seed_rtc_a;
 
 // MCU_SCK is not on a clock pin of the Mini (CLOCK_DEDICATED_ROUTE FALSE in the ucf), as baseconf
 wire mcu_sck = MCU_SCK;
@@ -285,10 +289,10 @@ kg_mcu #(
 	.BTNS				(hw_btn),
 
 	.RTC_A			(rtc_a),
-	.RTC_DI			(8'd0),
+	.RTC_DI			(keep_rtc_di),
 	.RTC_DO			(rtc_do),
-	.RTC_CS			(1'b0),
-	.RTC_WR_N		(1'b1),
+	.RTC_CS			(keep_rtc_wr),
+	.RTC_WR_N		(~keep_rtc_wr),
 
 	.UART_RX_DATA	(),
 	.UART_RX_IDX	(),
@@ -406,7 +410,7 @@ wire [2:0] rtc_set_field;
 uknc_rtc_seed rtc_seed(
 	.clk		(clk_host),
 	.busy		(mcu_busy),
-	.rtc_a	(rtc_a),
+	.rtc_a	(seed_rtc_a),
 	.rtc_do	(rtc_do),
 	.set_tgl	(rtc_set_tgl),
 	.set_field(rtc_set_field),
@@ -493,6 +497,11 @@ uknc #(.PHYS_FDD(0)) machine(
 	.rtc_min				(),
 	.rtc_sec				(),
 	.rtc_dow				(),
+	.keep_rtc_own		(keep_rtc_own),
+	.keep_rtc_a			(keep_rtc_a),
+	.keep_rtc_di			(keep_rtc_di),
+	.keep_rtc_wr			(keep_rtc_wr),
+	.rtc_do				(rtc_do),
 
 	.sd_img_mounted	(sdc_mounted[4:0]),
 	.sd_img_size		(sdc_size[31:0]),

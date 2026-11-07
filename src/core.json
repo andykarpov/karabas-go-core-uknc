@@ -1,11 +1,11 @@
 {
     "id": "uknc",
     "name": "UKNC MC-0511",
-    "build": "26110701",
+    "build": "26110702",
     "visible": true,
     "type": "osd",
     "order": 5,
-    "eeprom_bank": 255,
+    "eeprom_bank": 4,
     "rtc_mode": 1,
     "roms": [],
     "spi_freq": 16,

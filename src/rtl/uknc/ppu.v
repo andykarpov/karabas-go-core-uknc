@@ -33,7 +33,11 @@ module ppu_wb(
     pin_tmr_ena_o,
 
     pin_cart_sel_o,
-    pin_cart_bank_o
+    pin_cart_bank_o,
+
+    pin_rom_o,
+    pin_rom_ovr_i,
+    pin_rom_ovr_dat_i
 );
 input        clk_ppu_p;
 input        clk_ppu_n;
@@ -71,6 +75,11 @@ output       pin_tmr_ena_o;
 // bank R177054[2:1] - for the IDE cartridge in src/ide/ide.v.  Sep 2026.
 output       pin_cart_sel_o;
 output [ 1:0]pin_cart_bank_o;
+// The cycle reads the firmware ROM; pin_rom_ovr_i (for the address of the cycle) puts
+// pin_rom_ovr_dat_i in place of the ROM word - the kept SETUP colors (uknc_setup_keep.v).  Nov 2026.
+output       pin_rom_o;
+input        pin_rom_ovr_i;
+input  [15:0]pin_rom_ovr_dat_i;
 //========================================================================================
 //  Wishbone PPU
 //========================================================================================
@@ -155,6 +164,7 @@ assign pin_tmr_ena_o = R177054[9];
 wire   cart_sel = ~R177054[0] & ~R177054[4] & (|R177054[2:1]) & ~R177054[3];
 assign pin_cart_sel_o  = cart_sel;
 assign pin_cart_bank_o = R177054[2:1];
+assign pin_rom_o       = rom;
 //========================================================================================
 // VIRQ
 //========================================================================================
@@ -164,7 +174,7 @@ assign wbi_ack_i = wbi_una_o|pin_wbi_ack_i;
 
 always @(*)
     casex({wbm_we_o,pin_wbm_ack_i,rio,ram_rd,rom})
-    'b0_xxx1: wbm_dat_i <= prom;
+    'b0_xxx1: wbm_dat_i <= pin_rom_ovr_i ? pin_rom_ovr_dat_i : prom;
     'b0_xx10: wbm_dat_i <= dinp_ram[15:0];
     'b0_x100: wbm_dat_i <= data_rio;
     'b0_1000: wbm_dat_i <= pin_wbm_dat_i;

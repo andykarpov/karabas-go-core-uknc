@@ -87,6 +87,14 @@ module uknc #(
 	output wire [5:0] rtc_sec,
 	output wire [3:0] rtc_dow,
 
+	// the SETUP colors kept in the DS1307 registers 8..14 of kg_mcu (clk_25, uknc_setup_keep): rtc_own = these
+	// drive the RTC address (else uknc_rtc_seed), rtc_wr a write of one clock (RTC_CS, !RTC_WR_N)
+	output wire keep_rtc_own,
+	output wire [7:0] keep_rtc_a,
+	output wire [7:0] keep_rtc_di,
+	output wire keep_rtc_wr,
+	input wire [7:0] rtc_do,
+
 	// image sectors (clk_25, img_sdc): slots 0-3 the floppies, 4 the IDE disk
 	input wire [4:0] sd_img_mounted,
 	input wire [31:0] sd_img_size,
@@ -317,6 +325,8 @@ wire cpu_wbi_stb_o;
 wire cart_sel;
 wire [1:0] cart_bank;
 wire pp_rst = reset | host_busy | ~init;
+wire ppu_rom, ppu_rom_ovr;
+wire [15:0] ppu_rom_ovr_dat;
 
 ppu_wb ppu1(
 	.clk_ppu_p      (ppuclk_p),
@@ -352,7 +362,32 @@ ppu_wb ppu1(
 
 	.pin_tmr_ena_o  (pin_tmr_ena_o),
 	.pin_cart_sel_o (cart_sel),
-	.pin_cart_bank_o(cart_bank)
+	.pin_cart_bank_o(cart_bank),
+
+	.pin_rom_o        (ppu_rom),
+	.pin_rom_ovr_i    (ppu_rom_ovr),
+	.pin_rom_ovr_dat_i(ppu_rom_ovr_dat)
+);
+
+// the colors of the SETUP menu (F7) over resets and power off
+uknc_setup_keep setup_keep(
+	.ppu_clk     (ppuclk_p),
+	.ppu_adr     (ppu_wbm_adr_o[15:0]),
+	.ppu_we      (ppu_wbm_wre_o),
+	.ppu_stb     (ppu_wbm_stb_o),
+	.ppu_sel     (ppu_wbm_sel_o),
+	.ppu_dat     (ppu_wbm_dat_o),
+	.ppu_rom     (ppu_rom),
+	.rom_ovr     (ppu_rom_ovr),
+	.rom_ovr_dat (ppu_rom_ovr_dat),
+
+	.clk         (clk_25),
+	.busy        (host_busy),
+	.rtc_own     (keep_rtc_own),
+	.rtc_a       (keep_rtc_a),
+	.rtc_di      (keep_rtc_di),
+	.rtc_wr      (keep_rtc_wr),
+	.rtc_do      (rtc_do)
 );
 
 //------------------------------------------------------------//
