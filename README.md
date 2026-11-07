@@ -85,6 +85,23 @@ Notes:
   after it (УПР+C breaks a program in RT-11).
 - F12 resets the machine (the Reset item), Menu (Win) + Esc opens the OSD.
 
+### RT-11 versions
+
+A game that stops at once with `*** СТОП ***` (the HALT instruction) may need another RT-11, this is not a
+fault of the core. Some `.SAV` programs keep code in block 0, at 500..776, but after loading a program the
+RT-11 monitor writes the block map of that program into low memory:
+
+| RT-11 | System disk | Where the map goes |
+|---|---|---|
+| V05.04 | `BASERT11.DSK` of tang-uknc | 540..557 |
+| V05.02 | `sys1002.dsk` | 514..533 |
+| V5.01a | `sysimage.dsk` | inside the monitor, low memory stays intact |
+
+For example, `LAND.SAV` of `game.dsk` stops with `000556/0000` on V05.04 and works on `sysimage.dsk`
+([uknc.narod.ru/DSK](https://uknc.narod.ru/DSK/index.htm)). `game.dsk` has other programs with data at
+540..557 (SEEKER, GARDEN, CAT, VERT, MAUS, TETUK, DIGGER), they were not tried. Run SAV boots the system
+disk you put in `/mc0511-media`, so the same applies to it.
+
 ## Build
 
 ISE 14.7: `cd src && make go` (or `mini`, `minig`); see [CLAUDE.md](CLAUDE.md).
