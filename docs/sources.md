@@ -13,7 +13,7 @@ same layout. The changes are those of the port in karabas-forge (`docs/forge/too
 |---|---|
 | `audio.v` | I2S word select one bit before the MSB (counts 2 / 18, was 3 / 19) |
 | `kakave.v` | timer rate `25'd21875000` (was 21937500); a set field 5 = seconds |
-| `fdd/fdd4.v` | `sector_ready`: rotation waits in the header / data gap until the sector of the MCU is in the buffer (no stale data with a good synthetic CRC); a read is requested while the sector is not ready |
+| `fdd/fdd4.v` | `sector_ready`: rotation waits in the header / data gap until the sector of the MCU is in the buffer (no stale data with a good synthetic CRC); a read is requested while the sector is not ready; writing to the image (this repository, 2026-11; `write_sd` was never set in tang): the 256 words after the data mark A1 FB of the written stream go to the buffer and the sector goes to the card |
 | `xm2-01.v` | the timer on `pin_vm_clk25` with an edge detector of `timer_clk` (was clocked by it) |
 | `sdram2.v` | the video phase starts at `horz` 8; DQ driven through an output enable; five refreshes per line (8192-row chip of the Karabas boards); read data in one IOB register bank, its phase and the acknowledgements advance with it (`port_sdram.py retime`) |
 | `ide/ide.v` | input `image_sectors`: an invalid CHS or an LBA beyond the image gives ATA IDNF (`bad_location`) instead of a request to the MCU |
@@ -32,7 +32,7 @@ loader), `hdmi/*`, the Gowin IP (`ip/*`, `fdd/ip/*`, `ide/ide_rom.v`), `top.v`.
 | Path | From |
 |---|---|
 | `src/rtl/uknc.v` | the machine of `tang/src/top.v` without the Tang host, with the wiring of forge `machine()` (`prepare.py`): memory phase aligned to the PPU clock, PPU held while the MCU is busy, the image size for the IDE bounds, the physical floppy |
-| `src/rtl/uknc_memory.v` | forge `mc0511_memory.v`: the ROMs, the sector buffer and the UART FIFO in place of the Gowin IP; ROM paths `roms/` |
+| `src/rtl/uknc_memory.v` | forge `mc0511_memory.v`: the ROMs, the sector buffer and the UART FIFO in place of the Gowin IP; ROM paths `roms/`; the sector buffer is RAMB8BWER by hand (XST dropped its second write port when inferring it) |
 | `src/rtl/uknc_keyboard.v` | forge `mc0511_keyboard.v`: USB boot report to the UKNC keyboard codes (the table of the MCU firmware of tang `mnano/uknc.h`; the keys `;:`, `'"`, `` `~ ``, `=+` and Insert..PageDown changed to the LAT table of UKNCBTL `ScreenView.cpp`: `: *`, `@`, `; +`, `Ч ^`, Home = Ъ, Insert = СБРОС, Delete = ПОМ, PageUp = СТОП, End = УСТ, PageDown = ИСП; the rows are no longer sent round robin: the modifier rows 5 and 6 (Shift, УПР / АЛФ / ГРАФ) go down before the other rows and up after them, so Shift+key is never sent key first) |
 | `src/rtl/uknc_physical_fdd.v`, `uknc_mfm_rx.v`, `uknc_mfm_tx.v` | forge `mc0511_physical_fdd.v`, `mc0511_mfm_*.v` (Go floppy connector) |
 | `src/roms/uknc_rom.hex`, `rawtrk.hex` | tang `tang/rom/uknc_rom.mif`, `tang/src/fdd/rom128/rawtrk.mif` (16-bit words, `tools/mif.py`) |
