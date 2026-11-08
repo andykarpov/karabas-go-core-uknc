@@ -88,7 +88,7 @@ module uknc #(
 	output wire [5:0] rtc_sec,
 	output wire [3:0] rtc_dow,
 
-	// the SETUP colors kept in the DS1307 registers 8..14 of kg_mcu (clk_25, uknc_setup_keep): rtc_own = these
+	// the SETUP colors kept in the DS1307 registers 14..20 of kg_mcu (clk_25, uknc_setup_keep): rtc_own = these
 	// drive the RTC address (else uknc_rtc_seed), rtc_wr a write of one clock (RTC_CS, !RTC_WR_N)
 	output wire keep_rtc_own,
 	output wire [7:0] keep_rtc_a,

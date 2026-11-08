@@ -44,7 +44,7 @@ The modules were renamed `mc0511_*` -> `uknc_*`.
 
 | Path | From |
 |---|---|
-| `src/rtl/uknc_setup_keep.v` | new: the colors of the SETUP menu in DS1307 registers 8..14 of kg_mcu (the core EEPROM, `eeprom_bank` 4), put in place of the ROM table 100012 and the terminal template 112252 |
+| `src/rtl/uknc_setup_keep.v` | new: the colors of the SETUP menu in DS1307 registers 14..20 of kg_mcu (the core EEPROM, `eeprom_bank` 4), put in place of the ROM table 100012 and the terminal templates 112142, 112252 (the real words for the ROM sum of the start test) |
 | `src/rtl/karabas_*_top.v` | new, after the tops of karabas-go-core-baseconf / tsconf |
 | `src/karabas_*.ucf` | pins of karabas-go-core-baseconf (= tsconf); timing of forge `src/constraints/timing.ucf` with the HDMI part of baseconf |
 | `src/karabas_*.xst`, `.ut`, `src/Makefile` | karabas-go-core-baseconf |

@@ -22,7 +22,7 @@ step with the OSD of `core.json`.
 - `src/rtl/uknc.v`: the machine (CPU, PPU, memory / video, floppies, IDE, sound, Kakave, UART); the host is in the tops.
 - `src/rtl/karabas_<board>_top.v`: kg_pll, kg_mcu, img_sdc (image sectors: FDD0-3 slots 0-3, HDD0 slot 4),
   kg_soft_switches, uknc_keyboard, OSD, video / audio out of the board.
-- `src/rtl/uknc_setup_keep.v`: the SETUP colors (F7) kept in DS1307 registers 8..14 of kg_mcu = `/config/uknc.eep`
+- `src/rtl/uknc_setup_keep.v`: the SETUP colors (F7) kept in DS1307 registers 14..20 of kg_mcu (not 12, 13: kg_mcu does not send those to the firmware) = `/config/uknc.eep`
   (`eeprom_bank` 4); its header has the PPU ROM addresses it relies on. Registers 0..6 are the time (uknc_rtc_seed).
 - `src/rtl/uknc_switches.vh`: the OSD switch layout (index = position in the flat `osd` list of `core.json`, the same
   on every board), `uknc_switch_fields.vh`: their fields. Change `core.json`, the INIT value and the fields
