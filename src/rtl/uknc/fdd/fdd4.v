@@ -221,17 +221,22 @@ always @(posedge pin_25mhz_ck)begin
 end
 reg  read_sd  = 1'b0;
 reg  write_sd = 1'b0;
+reg         wr_active  = 1'b0;   // taking the 256 words of a sector
+reg         wr_pending = 1'b0;   // a whole sector waits to go to the card
+reg  [ 7:0] wr_count   = 8'd0;
+reg  [12:0] wr_sector  = 13'd0;
+reg  [ 1:0] wr_drive   = 2'd0;
 
-assign rsector = sd_sec;
+assign rsector = write_sd ? {19'd0,wr_sector} : sd_sec;
 assign rdy     = ~ppu_vm_init_i;
 assign rstart  = {3'b000, read_sd}<<drive;
-assign wstart  = {3'b000,write_sd}<<drive;
+assign wstart  = {3'b000,write_sd}<<wr_drive;
 
 // sd_taken: sd_card.v serves one requester at a time and the MCU picks
 // the drive from a one-hot mask, so a floppy request while the IDE's is
 // up would be misread.  The floppy simply skips that sector's request;
 // the software sees a read error and retries, which it does anyway.
-wire is_clean = ~motor|rbusy|sd_taken;
+wire is_clean = ~motor|rbusy|sd_taken|wr_pending;
 
 // read_sd rises on sd_rd's rising edge and falls as soon as the reader is
 // busy or the motor stops; sd_card.v sees it in this same clock domain.
@@ -240,6 +245,48 @@ always @(posedge pin_25mhz_ck)begin
     sd_rd_d <= sd_rd;
     if(is_clean)               read_sd <= 1'b0;
     else read_sd <= sd_rd && disk_insert && !sector_ready;
+end
+//---------------------------------------------------------------------------------
+// Writing a sector to the image (Nov 2026; write_sd was never set before).
+//
+// The ROM driver starts writing on the CRC flag of the header, and the flag is up
+// during the CRC word here, not after it as on a drive, so its words land one word
+// before the data window of the track and cannot be stored by count_word. They are
+// taken from the written stream instead: the 256 words after the data mark A1 FB
+// (the first byte of a written word is its low byte, 175641 octal in the ROM) go to
+// the buffer in the order they come, then the sector goes to the card. FORMAT writes
+// the same marks and is locked to the same CRC flags, so it fills sector after sector.
+//
+// The sector and the drive are kept at the mark: the request can wait for the IDE
+// cartridge, while the disk turns on. The next read waits for the request, and the
+// rotation waits for that read (sector_ready), so a slow card only delays the driver.
+//---------------------------------------------------------------------------------
+reg  [ 1:0] write_s    = 2'b00;
+always @(posedge pin_25mhz_ck) write_s <= {write_s[0], write};
+wire        write_rise = write_s[0] & ~write_s[1]; // write lasts a PPU clock
+
+always @(posedge pin_25mhz_ck)begin
+    if(ppu_vm_init_i || !motor || step_r)
+        wr_active <= 1'b0;
+    else if(write_rise)begin
+        if(wr_active)begin
+            wr_count <= wr_count + 1'b1;
+            if(wr_count == 8'd255)begin
+                wr_active  <= 1'b0;
+                wr_pending <= 1'b1;
+            end
+        end else if(data_in == 16'hFBA1 && disk_insert && !wr_pending)begin
+            wr_active <= 1'b1;
+            wr_count  <= 8'd0;
+            wr_sector <= sd_sec[12:0];
+            wr_drive  <= drive;
+        end
+    end
+    if(write_sd && rbusy)begin
+        write_sd   <= 1'b0;
+        wr_pending <= 1'b0;
+    end else if(wr_pending && !rbusy && !sd_taken && !read_sd)
+        write_sd   <= 1'b1;
 end
 //---------------------------------------------------------------------------------
 //wire reset_fifo = word_sectr == 9'h13 || !motor; //3
@@ -265,8 +312,8 @@ dbufsec16 bffsd(
     .clkb  (pin_25mhz_ck), //input clkb
     .ceb   (        1'b1), //input ceb
     .resetb(        1'b0), //input resetb
-    .wreb  (       write), //input wreb
-    .adb   (  count_word), //input [7:0] adb
+    .wreb  (wr_active && write_rise), //input wreb
+    .adb   (wr_active ? wr_count : count_word), //input [7:0] adb
     .dinb  (     data_in), //input [15:0] dinb
     .doutb (    data_sec) //output [15:0] doutb
 );

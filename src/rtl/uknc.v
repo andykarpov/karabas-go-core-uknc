@@ -509,7 +509,7 @@ fdd4 fdd(
 
 	.data_in      (disk_data_in),
 	.data_out     (disk_data_out),
-	.write        (disk_write && !physical_selected && system_fdd_en),
+	.write        (disk_write && !physical_selected && system_fdd_en && !system_floppy_wprot[disk_drive]),
 
 	.drive        (disk_drive),
 	.motor        (disk_motor && !physical_selected && system_fdd_en),
