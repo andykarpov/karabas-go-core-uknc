@@ -48,7 +48,7 @@ end
 wire rx_valid,rx_crc,tx_active,tx_pulse,tx_consumed,tx_crc;
 wire [15:0] rx_data;
 wire abort_access=!running || changing_head || (step && !old_step);
-uknc_mfm_rx rx(.clk(clk),.reset(abort_access || search || write_mode),
+uknc_mfm_rx rx(.clk(clk),.reset(abort_access || write_mode),.search(search),
  .flux(rdata_s[1] && !rdata_old),.data(rx_data),.valid(rx_valid),.crc_ok(rx_crc));
 uknc_mfm_tx tx(.clk(clk),.reset(abort_access || protected_disk || search || data_read),
  .write_word(data_write),.data(bus_data),.mark(mark),

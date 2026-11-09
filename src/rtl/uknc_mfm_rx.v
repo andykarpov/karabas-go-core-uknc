@@ -2,14 +2,14 @@
 // GO input buffers invert the cable: a flux transition is a positive pulse.
 // Recover 2 us channel cells, then align to the missing-clock A1 (4489).
 module uknc_mfm_rx(
- input wire clk, reset, flux,
+ input wire clk, reset, search, flux,
  output reg [15:0] data=0,
  output reg valid=0, crc_ok=0
 );
 reg [5:0] phase=0;
 reg seen=0;
 reg [15:0] raw=0;
-reg aligned=0, half_word=0;
+reg aligned=0, half_word=0, searching=0;
 reg [3:0] cells=0;
 reg [7:0] high_byte=0;
 reg [15:0] crc=16'hffff;
@@ -30,8 +30,10 @@ always @(posedge clk)begin
  valid<=0;
  if(reset)begin
   phase<=0;seen<=0;raw<=0;aligned<=0;half_word<=0;cells<=0;
-  high_byte<=0;crc<=16'hffff;crc_ok<=0;data<=0;marker_age<=31;
+  high_byte<=0;crc<=16'hffff;crc_ok<=0;data<=0;marker_age<=31;searching<=0;
  end else begin
+  // GDR: no TR until the next A1, as a real VP1-128 hides it while it looks for the marker.
+  if(search)begin aligned<=0;searching<=1;cells<=0;half_word<=0;crc_ok<=0;marker_age<=31;end
   // Re-centre on every transition; sample halfway to the next channel cell.
   if(flux)begin phase<=0;seen<=1;end
   else if(phase==49)phase<=0;
@@ -44,16 +46,19 @@ always @(posedge clk)begin
    // track reads without another GDR command. Consecutive A1 bytes belong
    // to the same marker run and must all contribute to that CRC.
    if(next_raw==16'h4489 && (!aligned || marker_age>=16))begin
-     aligned<=1;cells<=0;half_word<=1;high_byte<=8'ha1;
+     aligned<=1;searching<=0;cells<=0;half_word<=1;high_byte<=8'ha1;
      crc<=crc_byte(16'hffff,8'ha1);crc_ok<=0;
-   end else if(aligned)begin
+   end else if(!search)begin
+    // Without a marker, and during a GDR search too, the register keeps shifting: the ROM driver (132630) waits for
+    // a non-zero word, then for 0 / 177777 of the sync zone. A word held through a search that timed out (zero C,H of
+    // track 0, an index mark with no A1 close enough) would read as "only zeros" until the next marker.
     cells<=cells+1'b1;
     if(cells==15)begin
      crc<=crc_byte(crc,byte_data);
      half_word<=~half_word;
      if(half_word)begin
-      data<={high_byte,byte_data};valid<=1;
-      crc_ok<=crc_byte(crc,byte_data)==0;
+      data<={high_byte,byte_data};valid<=!searching;
+      crc_ok<=aligned && !searching && crc_byte(crc,byte_data)==0;
      end else high_byte<=byte_data;
     end
    end
