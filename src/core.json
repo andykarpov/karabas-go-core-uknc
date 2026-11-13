@@ -10,9 +10,9 @@
     "roms": [],
     "spi_freq": 16,
     "boards": {
-        "go": {"bitstream": "karabas_go.bin"},
-        "mini": {"bitstream": "karabas_mini.bin"},
-        "minig": {"bitstream": "karabas_minig.bin"}
+        "go": {"link": 2, "build": "26111337", "bitstream": "karabas_go.bin"},
+        "mini": {"link": 2, "build": "26111337", "bitstream": "karabas_mini.bin"},
+        "minig": {"link": 2, "build": "26111310", "bitstream": "karabas_minig.bin"}
     },
     "osd": [
     {"type": "F", "name": "FDD0", "slot": 0, "extensions": ".dsk", "dir": "/mc0511-media"},
