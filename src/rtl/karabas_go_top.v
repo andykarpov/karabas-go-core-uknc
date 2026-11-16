@@ -187,8 +187,9 @@ wire clk_ppu = pll_clk[4];
 wire clk_8mhz = pll_clk[5];
 wire areset = ~locked;
 
-// the video clock: 40 MHz for the 800 x 600 @ 60 Hz output of the frame buffer (a second PLL from clk_ram);
-// its PLL output without a BUFG also drives the BUFGMUX of the HDMI pll
+// the video clock: 40 MHz for the 800 x 600 @ 60 Hz output of the frame buffer (a second PLL from clk_ram),
+// 27 MHz for 720 x 576 @ 50 Hz (Video in the OSD; a DCM_CLKGEN from clk_ram, 50 * 27 / 50: the LX25 has two PLLs,
+// both used, and the VGA DAC takes the jitter of a DCM). BUFGMUX takes the raw outputs.
 wire [5:0] pll2_clk;
 wire locked2;
 kg_pll #(
@@ -203,8 +204,33 @@ kg_pll #(
 	.locked		(locked2)
 );
 wire clk_vid_pll = pll2_clk[0];
+wire clk27_dcm, locked27;
+DCM_CLKGEN #(
+	.CLKIN_PERIOD(20.0),
+	.CLKFX_MULTIPLY(27),
+	.CLKFX_DIVIDE(50),
+	.CLKFX_MD_MAX(0.54),
+	.SPREAD_SPECTRUM("NONE"),
+	.STARTUP_WAIT("FALSE")
+) dcm27 (
+	.CLKIN(clk_ram),
+	.RST(~locked),
+	.FREEZEDCM(1'b0),
+	.CLKFX(clk27_dcm),
+	.CLKFX180(),
+	.CLKFXDV(),
+	.LOCKED(locked27),
+	.STATUS(),
+	.PROGCLK(1'b0),
+	.PROGDATA(1'b0),
+	.PROGEN(1'b0),
+	.PROGDONE()
+);
+wire pal;                    // 720 x 576 @ 50 Hz (sw_video), on clk_host
+reg pal_sel = 1'b0;          // the BUFGMUX select: the 27 MHz only while its DCM is locked
+always @(posedge clk_ram) pal_sel <= pal & locked27;
 wire clk_vid;
-BUFG bufg_clk_vid(.I(clk_vid_pll), .O(clk_vid));
+BUFGMUX vidmux(.I0(clk_vid_pll), .I1(clk27_dcm), .S(pal_sel), .O(clk_vid));
 
 // the pixel clock of the VGA DAC
 ODDR2 video_clock(.Q(V_CLK), .C0(clk_vid), .C1(~clk_vid), .CE(1'b1), .D0(1'b1), .D1(1'b0), .R(1'b0), .S(1'b0));
@@ -450,7 +476,8 @@ uknc #(.PHYS_FDD(1)) machine(
 );
 assign SDR_A[12:11] = 2'b00;
 
-//--------- video: frame buffer in the SRAM, 800 x 600 @ 60 Hz out, OSD --------------
+//--------- video: frame buffer in the SRAM, 800 x 600 @ 60 Hz / 720 x 576 @ 50 Hz out, OSD --------------
+assign pal = sw_video;
 wire [2:0] red_m = sw_bgr ? blue : red;
 wire [2:0] blue_m = sw_bgr ? red : blue;
 wire [23:0] fb_rgb, osd_rgb;
@@ -468,6 +495,7 @@ uknc_framebuffer framebuffer(
 	.sram_we_n		(MWR_N),
 	.sram_oe_n		(MRD_N),
 	.clk_vid			(clk_vid),
+	.pal				(pal_sel),
 	.rgb				(fb_rgb),
 	.hs				(fb_hs),
 	.vs				(fb_vs),
@@ -490,8 +518,9 @@ kg_l2_osd_overlay osd(
 
 //--------- VGA --------------
 assign {VGA_R, VGA_G, VGA_B} = osd_rgb;
-assign VGA_HS = osd_hs;   // the syncs of the overlay: in step with osd_rgb
-assign VGA_VS = osd_vs;
+// the syncs of the overlay: in step with osd_rgb; 800 x 600 positive (VESA), 720 x 576 negative (CEA-861)
+assign VGA_HS = pal_sel ? ~osd_hs : osd_hs;
+assign VGA_VS = pal_sel ? ~osd_vs : osd_vs;
 
 //--------- i2s DAC (PCM5102): the serializer of tang on the PPU clock --------------
 // DIN / WS change on the PPU rising edge; the PCM5102 samples BCK rising: BCK inverted, half a cycle of setup / hold

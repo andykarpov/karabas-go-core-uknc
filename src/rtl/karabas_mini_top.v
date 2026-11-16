@@ -463,6 +463,7 @@ uknc_framebuffer framebuffer(
 	.sram_we_n		(MWR_N),
 	.sram_oe_n		(MRD_N),
 	.clk_vid			(clk_vid),
+	.pal				(1'b0),         // 800 x 600 only (no Video item on this board)
 	.rgb				(fb_rgb),
 	.hs				(fb_hs),
 	.vs				(fb_vs),
