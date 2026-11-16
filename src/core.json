@@ -10,7 +10,7 @@
     "roms": [],
     "spi_freq": 16,
     "boards": {
-        X, "bitstream": "karabas_go.bin"},
+        "go": {"link": 2, "build": "26111601", "bitstream": "karabas_go.bin"},
         "mini": {"link": 2, "build": "26111337", "bitstream": "karabas_mini.bin"},
         "minig": {"link": 2, "build": "26111310", "bitstream": "karabas_minig.bin"}
     },
