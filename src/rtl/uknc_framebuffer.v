@@ -8,6 +8,10 @@
  the SRAM (the UKNC does not use it) and read out in the VESA mode 800 x 600 @ 60 Hz, 40 MHz pixel (1056 x 628,
  positive syncs), the picture 640 x 600 in its middle (80 pixels of border each side). One buffer: the frame rates
  differ (50.57 / 60 Hz), a moving picture can show a seam where the two frames meet.
+ With pal (Video 720x576 50Hz in the OSD, clk_vid 27 MHz then) the output is 720 x 576 @ 50 Hz (864 x 625, the
+ timing of CEA-861 17, sync pulses of the core active high as in the 800 x 600 mode, the top inverts them for
+ negative syncs): the picture 640 x 576 with 40 pixels of border each side, the rows 10..297 (the source lines
+ 20..595: the UKNC picture of sdram2 is in its lines 20..593, visible_z).
 
  - capture (clkram): a pixel is 6 bits (2 per channel: the levels 0, 100, 110, 111 of the 3-bit colours of
    sdram2), two pixels a 16-bit word, the word goes into a write FIFO with its address {row, x / 2}. sdram2 shows
@@ -38,8 +42,9 @@ module uknc_framebuffer (
 	output wire [1:0] sram_we_n,
 	output wire [1:0] sram_oe_n,
 
-	// output (clk_vid, 40 MHz)
+	// output (clk_vid: 40 MHz, 27 MHz with pal)
 	input wire clk_vid,
+	input wire pal,                 // 720 x 576 @ 50 Hz (async: synchronised to clk_vid here)
 	output reg [23:0] rgb = 24'd0,
 	output reg hs = 1'b0,
 	output reg vs = 1'b0,
@@ -200,17 +205,35 @@ always @(posedge clkram) begin
 	endcase
 end
 
-//---------------------------------------------------------------- output 800 x 600 @ 60 Hz
+//---------------------------------------------------------------- output 800 x 600 @ 60 Hz / 720 x 576 @ 50 Hz
 reg [10:0] hc = 11'd0;
 reg [9:0] vc = 10'd0;
+reg [2:0] pal_s = 3'd0;
+wire m576 = pal_s[2];
+// the raster of the mode
+wire [10:0] h_last = m576 ? 11'd863 : 11'd1055;
+wire [9:0] v_last = m576 ? 10'd624 : 10'd627;
+wire [10:0] h_pic0 = m576 ? 11'd40 : 11'd80;     // the first pixel of the picture
+wire [10:0] h_pic1 = m576 ? 11'd680 : 11'd720;
+wire [10:0] h_vis = m576 ? 11'd720 : 11'd800;
+wire [9:0] v_vis = m576 ? 10'd576 : 10'd600;
+wire [10:0] h_sync0 = m576 ? 11'd732 : 11'd840;
+wire [10:0] h_sync1 = m576 ? 11'd796 : 11'd968;
+wire [9:0] v_sync0 = m576 ? 10'd581 : 10'd601;
+wire [9:0] v_sync1 = m576 ? 10'd586 : 10'd605;
+wire [9:0] row0 = m576 ? 10'd10 : 10'd0;           // even: the bank of a row stays vc[1]
+wire [9:0] rows = m576 ? 10'd288 : 10'd300;
+wire [9:0] v_wrap = m576 ? 10'd624 : 10'd626;      // the last even line: fetch the first row of the next frame
 reg [15:0] lb_q = 16'd0;
 reg act1 = 1'b0, sel1 = 1'b0, act2 = 1'b0, sel2 = 1'b0;
 reg [1:0] hs_d = 2'b00, vs_d = 2'b00, de_d = 2'b00;
 
-wire [10:0] sx = hc - 11'd80;   // the source pixel
-wire in_pic = hc >= 11'd80 && hc < 11'd720 && vc < 10'd600;
-// at the start of the even line 2k: the row k + 1 (at line 626: the row 0 of the next frame)
-wire [9:0] next_row = (vc == 10'd626) ? 10'd0 : {1'b0, vc[9:1]} + 10'd1;
+wire [10:0] sx = hc - h_pic0;   // the source pixel
+wire in_pic = hc >= h_pic0 && hc < h_pic1 && vc < v_vis;
+// at the start of the even line 2k: the row row0 + k + 1 (at line v_wrap: the row row0 of the next frame)
+wire [9:0] next_k = {1'b0, vc[9:1]} + 10'd1;
+wire next_ok = vc == v_wrap || next_k < rows;
+wire [9:0] next_row = (vc == v_wrap) ? row0 : row0 + next_k;
 
 function [7:0] expand;
 	input [1:0] c;
@@ -218,15 +241,20 @@ function [7:0] expand;
 endfunction
 
 always @(posedge clk_vid) begin
-	if (hc == 11'd1055) begin
+	pal_s <= {pal_s[1:0], pal};
+	if (pal_s[2] != pal_s[1]) begin     // a change of the mode: a new frame
 		hc <= 11'd0;
-		vc <= (vc == 10'd627) ? 10'd0 : vc + 10'd1;
+		vc <= 10'd0;
+	end
+	else if (hc >= h_last) begin
+		hc <= 11'd0;
+		vc <= (vc >= v_last) ? 10'd0 : vc + 10'd1;
 	end
 	else
 		hc <= hc + 11'd1;
 
 	// fetch the next row at the start of an even line
-	if (hc == 11'd0 && !vc[0] && next_row < 10'd300) begin
+	if (hc == 11'd0 && !vc[0] && next_ok) begin
 		req_row_v <= next_row;
 		req_tgl_v <= ~req_tgl_v;
 	end
@@ -240,9 +268,9 @@ always @(posedge clk_vid) begin
 	                      : {expand(lb_q[5:4]), expand(lb_q[3:2]), expand(lb_q[1:0])};
 	else rgb <= 24'd0;
 
-	hs_d <= {hs_d[0], hc >= 11'd840 && hc < 11'd968};
-	vs_d <= {vs_d[0], vc >= 10'd601 && vc < 10'd605};
-	de_d <= {de_d[0], hc < 11'd800 && vc < 10'd600};
+	hs_d <= {hs_d[0], hc >= h_sync0 && hc < h_sync1};
+	vs_d <= {vs_d[0], vc >= v_sync0 && vc < v_sync1};
+	de_d <= {de_d[0], hc < h_vis && vc < v_vis};
 	hs <= hs_d[0];
 	vs <= vs_d[0];
 	de <= de_d[0];

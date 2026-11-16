@@ -17,4 +17,5 @@ wire sw_hdd_en = softsw[24*8];
 wire sw_hdd_wprot = softsw[25*8];
 wire [1:0] sw_hdd_mode = softsw[26*8 +: 2];
 wire [2:0] sw_cpu_slow = softsw[29*8 +: 3];
+wire sw_video = softsw[30*8];                       // Go only: 720 x 576 @ 50 Hz
 wire [5:0] sw_hdd_delay = {softsw[27*8 +: 4], 1'b0}; // 0..750 us in steps of 50 (tang: 25 us per step)

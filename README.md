@@ -48,6 +48,7 @@ the file items). The OSD opens with Menu (Win) + Esc.
 | Color | RGB / BGR |
 | Run SAV | runs a `.SAV` program in RT-11 (firmware 26110716 or newer; 26110520..26110715 reboot when the file is chosen): the disk `RT11SAV.DSK` is made from `RT11BASE.DSK` (or `BASERT11.DSK`, its name in `soft/` of tang-uknc) of `/mc0511-media`, an RT-11 system disk you put there, mounted in FDD0 and the machine reset; the disk before it stays as `RT11OLD.DSK` |
 | CPU speed | slows the CPU down: Fast (as before) or 1/2, 1/2.5, 1/3, 1/3.5, 1/4, 1/5, 1/6 of it. The core runs the programs faster than a real UKNC (about 3.5 times), so games may be too quick: choose the value by them. The PPU (screen, sound, keyboard) keeps its speed |
+| Video | Karabas Go only: the VGA output 800x600 60Hz (VESA, positive syncs) or 720x576 50Hz (negative syncs). Choose 720x576 when a monitor shows the 800x600 picture shifted or cut |
 | Reset (F12) | reset of the machine |
 | Sound | volume, beeper, Covox (port 177372, 177100 LPT or both), AY1-AY3, stereo, low-pass, old freaks |
 | Floppy drives | FDD controller, FDD1-FDD3 images, write protection of each drive, physical drive (Go: A-D; a Gotek needs only the geometry in `IMG.CFG`: 80 cylinders, 2 heads, 10 sectors of 512 bytes, no gap or IAM settings) |
