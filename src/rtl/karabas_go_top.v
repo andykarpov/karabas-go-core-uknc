@@ -232,8 +232,8 @@ always @(posedge clk_ram) pal_sel <= pal & locked27;
 wire clk_vid;
 BUFGMUX vidmux(.I0(clk_vid_pll), .I1(clk27_dcm), .S(pal_sel), .O(clk_vid));
 
-// the pixel clock of the VGA DAC
-ODDR2 video_clock(.Q(V_CLK), .C0(clk_vid), .C1(~clk_vid), .CE(1'b1), .D0(1'b1), .D1(1'b0), .R(1'b0), .S(1'b0));
+// the pixel clock of the VGA DAC, inverted: the DAC takes the pixel on the rising V_CLK, the middle of the pixel
+ODDR2 video_clock(.Q(V_CLK), .C0(clk_vid), .C1(~clk_vid), .CE(1'b1), .D0(1'b0), .D1(1'b1), .R(1'b0), .S(1'b0));
 // sdram clock
 ODDR2 sdr_clock(.Q(SDR_CLK), .C0(clk_sdr), .C1(~clk_sdr), .CE(1'b1), .D0(1'b1), .D1(1'b0), .R(1'b0), .S(1'b0));
 
